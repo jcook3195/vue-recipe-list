@@ -35,6 +35,7 @@
 
     .header {
         min-width: 24rem;
+        padding: 0 1rem;
     }
 
     h3 {
@@ -71,5 +72,11 @@
 
     .clearfix {
         clear: both;
+    }
+
+    @media only screen and (max-width: 760px) {
+        .header {
+            min-width: none;
+        }
     }
 </style>

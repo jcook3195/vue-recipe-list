@@ -179,4 +179,10 @@
         justify-content: center;
     }
 
+    @media only screens and (max-width: 760px) {
+        img {
+            width: 100%;
+        }
+    }
+
 </style>

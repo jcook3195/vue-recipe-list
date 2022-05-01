@@ -1,6 +1,8 @@
 <template>
     <the-header title="Vue Recipe Grocery List"></the-header>
-    <the-items></the-items>
+    <div class="content-container">
+        <the-items></the-items>
+    </div>    
 </template>
 
 <script>
@@ -29,4 +31,10 @@
     body {
         margin: 0;
     }
+
+    @media only screen and (max-width: 760px) {
+        .content-container {
+            padding: 0 1rem;
+        }
+    }    
 </style>
