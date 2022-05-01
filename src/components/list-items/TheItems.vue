@@ -170,8 +170,8 @@
     img {
         width: 20rem;
         margin: 1rem auto;
-        border: 8px solid #ef476f;
-        border-radius: 10px;
+        border: 8px solid #E63946;
+        border-radius: 50%;
     }
 
     .button-container {
