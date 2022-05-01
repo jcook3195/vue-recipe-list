@@ -81,9 +81,6 @@
                 }
             };
 
-            // hold the new recipe items
-            const newItems = [];
-
             axios.request(options).then(response => {
                 // set the recipe name and get the components from the response to get the ingredients easier during the loop
                 this.recipeName = response.data.name;
@@ -106,13 +103,9 @@
                         src: 'https://picsum.photos/200?random=' + counter
                     };
 
-                    newItems.unshift(newItem);
+                    // add the new item to the recipe items
+                    this.recipeItems.unshift(newItem);
                 }); 
-                
-                // loop through all the newItems and run the method to add them to recipeItems
-                newItems.forEach((element) => {
-                    this.addItem(element.title, element.quantity, element.src);
-                });
             }).catch(function (error) {
                 console.error(error);
             }); 
