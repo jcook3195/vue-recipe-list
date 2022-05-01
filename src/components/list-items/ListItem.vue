@@ -33,6 +33,10 @@
         justify-content: space-between;
     }
 
+    .header {
+        min-width: 24rem;
+    }
+
     h3 {
         font-size: 1.25rem;
     }

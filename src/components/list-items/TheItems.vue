@@ -1,6 +1,23 @@
 <template>
+    <base-modal v-if="recipeLoading" title="Getting Random Recipe Data" @closeModal="confirmError">
+        <template #default>
+            <p>Loading...</p>
+        </template>
+        <template #actions>
+            &nbsp;            
+        </template>
+    </base-modal>
+    <div class="img-container">
+        <img :src="imgSrc" alt="Recipe Image">
+    </div>
     <h1>{{ recipeName }}</h1>
-    <base-card>
+    <div class="nutrition-facts">
+        <div>Calories: <strong>{{ recipeCals }}</strong></div>
+        <div>Protein: <strong>{{ recipeProtein }}g</strong></div>
+        <div>Carbs: <strong>{{ recipeCarbs }}g</strong></div>
+        <div>Fat: <strong>{{ recipeFat }}g</strong></div>
+    </div>    
+    <base-card class="button-container">
         <base-button @click="setSelectedTab('recipe-items')" :mode="recipeItemButtonMode">List</base-button>
         <base-button @click="setSelectedTab('add-item')" :mode="addItemButtonMode">Add Item</base-button>
         <p>{{ info }}</p>
@@ -23,7 +40,13 @@
             return {
                 selectedTab: 'recipe-items',
                 recipeItems: [],
-                recipeName: null
+                imgSrc: null,
+                recipeName: null,
+                recipeCals: null,
+                recipeProtein: null,
+                recipeCarbs: null,
+                recipeFat: null,
+                recipeLoading: true
             };
         },
         provide() {
@@ -82,9 +105,15 @@
             };
 
             axios.request(options).then(response => {
-                // set the recipe name and get the components from the response to get the ingredients easier during the loop
+                // get the needed information from the response
                 this.recipeName = response.data.name;
                 const comps = response.data.sections[0].components;
+                const nutrition = response.data.nutrition;
+                this.imgSrc = response.data.thumbnail_url;
+                this.recipeCals = nutrition.calories;
+                this.recipeProtein = nutrition.protein;
+                this.recipeCarbs = nutrition.carbohydrates;
+                this.recipeFat = nutrition.fat;
                 
                 // set a counter for the random image generation
                 let counter = 0;
@@ -93,20 +122,24 @@
                 comps.forEach((element) => {
                     const ingredient = element.ingredient.name;
                     const quantity = element.measurements[0].quantity;
+                    const unit = element.measurements[0].unit.display_plural;
                     counter++;
 
                     // add the new items to newItems 
                     const newItem = {
                         id: new Date().toISOString(),
                         title: ingredient,
-                        quantity: quantity,
+                        quantity: quantity + ' ' + unit,
                         src: 'https://picsum.photos/200?random=' + counter
                     };
 
                     // add the new item to the recipe items
                     this.recipeItems.unshift(newItem);
                 }); 
-            }).catch(function (error) {
+
+                this.recipeLoading = false;
+            }).catch(error => {
+                this.recipeLoading = false;
                 console.error(error);
             }); 
         }
@@ -116,5 +149,34 @@
 <style scoped>
     h1 {
         text-align: center;
+        margin-top: 0;
     }
+
+    .nutrition-facts {
+        display: flex;
+        max-width: 40rem;
+        margin: auto;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 1.25rem;
+    }
+
+    .img-container {
+        max-width: 40rem;
+        margin: auto;
+        text-align: center;
+    }
+
+    img {
+        width: 20rem;
+        margin: 1rem auto;
+        border: 8px solid #ef476f;
+        border-radius: 10px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+    }
+
 </style>
